@@ -14,12 +14,12 @@
 API_URL = "https://api.github.com"
 
 #Username and token
-USERNAME = $username
-TOKEN = $token
+USERNAME=$username
+TOKEN=$token
 
 #User and Repository Info
-REPO_OWNER =$1
-REPO_NAME = $2
+REPO_OWNER=$1
+REPO_NAME=$2
 
 getGitHubUrl() {
 local url="${API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
@@ -43,11 +43,12 @@ collbarators="curl -s -u SaranyaAshok1989:ghp_ZBJdaJiXrAyExvWZhKZHGGMXKL7Cnx4Rqf
 
 }
 
-
 # Main script
 
-echo "Listing users with read access to ${REPO_OWNER}/${REPO_NAME}..."
+echo "Listing users with read access to ${REPO_OWNER}/${REPO_NAME}"
 getCollbaratorsList
+#getGitHubUrl
+
 
 
 
