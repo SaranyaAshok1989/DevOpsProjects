@@ -21,26 +21,28 @@ TOKEN = $token
 REPO_OWNER =$1
 REPO_NAME = $2
 
-function getGitHubUrl()
-{
-	local url = "${API_URL}/repos/${REPO_OWNER}/${REPO_NAME}
-	curl -s -u "${USERNAME}:${TOKEN}" "$url"
+getGitHubUrl() {
+local url="${API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
+echo "url is ${url}"
+        curl -s -u "${USERNAME}:${TOKEN}" "$url"
 }
 
-function getCollbaratorsList()
-{
-	local endPoint = "/collaborators"
-	collbarators = "$(getGitHubUrl "$endPoint" | jq -r '.[] | select(.permissions.pull == true) | .login')"
+getCollbaratorsList() {
+        #local endPoint="/collaborators"
+#       collbarators="$(getGitHubUrl | jq -r '.[] | select(.permissions.pull == true) | .login')"
+collbarators="curl -s -u SaranyaAshok1989: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  https://api.github.com/repos/SaranyaAshok1989/Java/collaborators | jq -r '.[] | select(.permissions.pull == true) | .login'"
+        echo "collob$collbarators"
 
-	if[[-z "$collbarators" ]]; then
-		echo "No users"
-	else
-		  echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
-		  echo "$collbarators"
+         if [[ -z "$collbarators" ]]; then
+                echo "No users"
+        else
+                  echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
+                  echo "$collbarators"
 
-	fi
+        fi
 
 }
+
 
 # Main script
 
