@@ -1,45 +1,39 @@
-##################
-#Author:Saranya
-#Date:dec 4 2023
-#version: v1
-
-#This script is to hit Gihub and fetch the name of collobarators
-
-#################
-
 #!/bin/bash
 
+# GitHub API URL
+API_URL="https://api.github.com"
 
-#Github api url
-API_URL = "https://api.github.com"
-
-#Username and token
+# GitHub username and personal access token
 USERNAME=$username
 TOKEN=$token
 
-#User and Repository Info
+# User and Repository information
 REPO_OWNER=$1
 REPO_NAME=$2
 
-getGitHubUrl() {
-local url="${API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
-echo "url is ${url}"
-        curl -s -u "${USERNAME}:${TOKEN}" "$url"
+# Function to make a GET request to the GitHub API
+github_api_get() {
+    local endpoint="$1"
+    local url="${API_URL}/${endpoint}"
+
+    # Send a GET request to the GitHub API with authentication
+    curl -s -u "${USERNAME}:${TOKEN}" "$url"
 }
 
+# Function to list users with read access to the repository
 getCollbaratorsList() {
-        #local endPoint="/collaborators"
-#       collbarators="$(getGitHubUrl | jq -r '.[] | select(.permissions.pull == true) | .login')"
-collbarators="curl -s -u SaranyaAshok1989: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  https://api.github.com/repos/SaranyaAshok1989/Java/collaborators | jq -r '.[] | select(.permissions.pull == true) | .login'"
-        echo "collob$collbarators"
+    local endpoint="repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
 
-         if [[ -z "$collbarators" ]]; then
-                echo "No users"
-        else
-                  echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
-                  echo "$collbarators"
+    # Fetch the list of collaborators on the repository
+        collaborators="$(github_api_get "$endpoint" | jq -r '.[] | select(.permissions.pull == true) | .login')"
 
-        fi
+    # Display the list of collaborators with read access
+    if test -z "$collaborators" ; then
+        echo "No users with read access found for ${REPO_OWNER}/${REPO_NAME}."
+    else
+        echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
+        echo "$collaborators"
+    fi
 
 }
 
